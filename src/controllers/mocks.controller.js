@@ -10,4 +10,22 @@ const getMockingUsers = async (req, res) => {
     res.send({status: "success", payload: users});
 }
 
-export default {getMockingPets, getMockingUsers}; 
+const generateData = async (req, res) => {
+    const { numUsers, numPets } = req.query;
+    try {
+        const generatedUsers = await MockingService.generateMockingUsers(numUsers);
+        const generatedPets = await MockingService.generateMockingPets(numPets);
+        res.status(200).json({
+            message: "datos generados correctamente",
+            generated: {
+                users: generatedUsers.length,
+                pets: generatedPets.length,
+            },
+        });
+    } catch (error) {
+        console.error("error al generar datos:", error);
+        res.status(500).json({ error: "Error al generar datos" });
+    }
+}; 
+
+export default {getMockingPets, getMockingUsers, generateData}; 

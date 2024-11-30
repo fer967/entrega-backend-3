@@ -2,11 +2,10 @@ import {faker} from "@faker-js/faker";
 import { createHash } from "../utils/index.js";
 
 class MockingService{
-    async generateMockingUsers(num){}
 
-    static async generateMockingPets(num){
+    static async generateMockingPets(numPets){
         const pets = [];
-        for(let i = 0; i < num; i++){
+        for(let i = 0; i < numPets; i++){
             pets.push({
                 name: faker.animal.dog(),
                 specie: faker.animal.type(),
@@ -16,9 +15,9 @@ class MockingService{
         return pets;
     }
 
-    static async generateMockingUsers(num){
+    static async generateMockingUsers(numUsers){
         const users = [];
-        for(let i = 0; i < num; i++){
+        for(let i = 0; i < numUsers; i++){
             users.push({
                 first_name: faker.person.firstName(),
                 last_name: faker.person.lastName(),
