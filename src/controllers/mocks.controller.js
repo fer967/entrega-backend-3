@@ -11,21 +11,24 @@ const getMockingUsers = async (req, res) => {
 }
 
 const generateData = async (req, res) => {
-    const { numUsers, numPets } = req.query;
+    const { users = 0, pets = 0 } = req.query;
     try {
+        const numUsers = parseInt(users) || 0;
+        const numPets = parseInt(pets) || 0;
         const generatedUsers = await MockingService.generateMockingUsers(numUsers);
         const generatedPets = await MockingService.generateMockingPets(numPets);
         res.status(200).json({
             message: "datos generados correctamente",
-            generated: {
-                users: generatedUsers.length,
-                pets: generatedPets.length,
+            generated: {                                     
+                generatedUsers,
+                generatedPets
             },
+            // ver guardar en DB
         });
     } catch (error) {
-        console.error("error al generar datos:", error);
-        res.status(500).json({ error: "Error al generar datos" });
+        console.error("Error al generar los datos:", error);
+        res.status(500).json({ error: "Error al generar los datos" });
     }
-}; 
+};
 
 export default {getMockingPets, getMockingUsers, generateData}; 
