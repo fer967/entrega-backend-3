@@ -31,5 +31,4 @@ class MockingService{
     }
 }
 
-
 export default MockingService;

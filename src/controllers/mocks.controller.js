@@ -1,4 +1,6 @@
 import MockingService from "../services/mocking.js";
+import Pet from "../dao/models/Pet.js";
+import User from "../dao/models/User.js";
 
 const getMockingPets = async (req, res) => {
     const pets = await MockingService.generateMockingPets(100);
@@ -11,20 +13,19 @@ const getMockingUsers = async (req, res) => {
 }
 
 const generateData = async (req, res) => {
-    const { users = 0, pets = 0 } = req.query;
+    const { users, pets } = req.query;
     try {
-        const numUsers = parseInt(users) || 0;
-        const numPets = parseInt(pets) || 0;
-        const generatedUsers = await MockingService.generateMockingUsers(numUsers);
+        const numUsers = parseInt(users);
+        const numPets = parseInt(pets);
+        const generatedUsers= await MockingService.generateMockingUsers(numUsers);  
         const generatedPets = await MockingService.generateMockingPets(numPets);
-        res.status(200).json({
-            message: "datos generados correctamente",
-            generated: {                                     
-                generatedUsers,
-                generatedPets
-            },
-            // ver guardar en DB
-        });
+        const insertedPets = await Pet.insertMany(generatedPets);
+        const insertedUsers = await User.insertMany(generatedUsers);
+        res.status(201).json({
+            message: "Mascotas y Usuarios generados e insertados con éxito",
+            pets: insertedPets,
+            users: insertedUsers
+        }); 
     } catch (error) {
         console.error("Error al generar los datos:", error);
         res.status(500).json({ error: "Error al generar los datos" });
