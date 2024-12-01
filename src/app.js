@@ -26,5 +26,6 @@ app.use('/api/adoptions',adoptionsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use("/api/mocks", mocksRouter);
 app.use('/', viewsRouter);
+app.use("/", express.static("./src/public"));
 
 app.listen(PORT,()=>console.log(`server on http://localhost:${PORT}`)); 
