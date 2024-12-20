@@ -21,6 +21,9 @@ https://hub.docker.com/repository/docker/fer967/entrega-backend-3/general
 ### descripcion del proyecto :
 ### desarrollo de una aplicacion que permite a personas conocer distintas mascotas que estan para ser adoptadas, las cuales estan almacenadas en una Base de Datos
 
-### dependencias utilizadas 
+### dependencias utilizadas
 ### para desarrollo : `nodemon`
-### ademas : `express` `bcrypt` `mongoose` `jsonwebtoken` `faker`
+### para test : `mocha` `chai` `supertest`
+### para vistas : `express-handlebars`
+### conexion a DB : `mongoose`
+### ademas : `express` `bcrypt` `jsonwebtoken` `faker`
