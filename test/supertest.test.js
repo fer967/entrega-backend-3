@@ -9,9 +9,9 @@ describe("Testing de entrega-backend-3", () => {
     describe("Testing de pets: ", () => {
         it("Endpoint POST /api/pets debe crear una mascota correctamente", async () => {
             const mascotaCreada = {
-                name: "Pepo",
-                specie: "loro",
-                birthDate: "2023-03-10"
+                name: "Juana",
+                specie: "tortuga",
+                birthDate: "2022-03-10"
             }
             const { statusCode, ok, _body } = await requester.post("/api/pets").send(mascotaCreada);
             console.log(statusCode);
@@ -23,9 +23,9 @@ describe("Testing de entrega-backend-3", () => {
         it("Al crear una mascota con los datos elementales, la mascota  debe tener adopted = false",
             async () => {
                 const nuevaMascota = {
-                    name: "Otto",
-                    specie: "perro",
-                    birthDate: "2021-01-01"
+                    name: "Luigi",
+                    specie: "canario",
+                    birthDate: "2023-01-01"
                 };
                 const { statusCode, body } = await requester.post("/api/pets").send(nuevaMascota);
                 expect(statusCode).to.equal(200);
@@ -63,15 +63,16 @@ describe("Testing de entrega-backend-3", () => {
             })
     })
 
+
     // ahora con usuarios
     describe("Testing de users", () => {
         let cookie;
 
         it("Debe registrar correctamente a un usuario", async () => {
             const nuevoUsuario = {
-                first_name: "Pedro",
-                last_name: "Sanchez",
-                email: "pedro@sanchez.com",
+                first_name: "Ana",
+                last_name: "Acosta",
+                email: "ana@acosta.com",
                 password: "1234"
             }
             const { _body } = await requester.post("/api/sessions/register").send(nuevoUsuario);
@@ -80,7 +81,7 @@ describe("Testing de entrega-backend-3", () => {
 
         it("Debe loguear correctamente al usuario y recuperar la cookie", async () => {
             const nuevoUsuario = {
-                email: "pedro@sanchez.com",
+                email: "ana@acosta.com",
                 password: "1234"
             }
             const resultado = await requester.post("/api/sessions/login").send(nuevoUsuario);
@@ -98,7 +99,55 @@ describe("Testing de entrega-backend-3", () => {
             const { _body } = await requester.get("/api/sessions/current").set("Cookie", [`${cookie.name}=${cookie.value}`]);
             expect(_body.payload.email).to.be.equal("pedro@sanchez.com");
         })
-    })
+    }) 
+
+
+    // con adopciones
+    describe("Test de las rutas de Adoption", () => {
+
+        it("Debe registrar correctamente una adopción", async () => {
+            const mockMascota = {
+                name: "Charlie",
+                specie: "conejo",
+                birthDate: "2022-04-10",
+            };
+            const petResponse = await requester.post("/api/pets").send(mockMascota);
+            console.log("Pet Response:", petResponse._body);
+            const petId = petResponse._body.payload?._id;
+            expect(petId).to.not.be.undefined;
+            const mockUsuario = {
+                first_name: "Luis",
+                last_name: "Olmos",
+                email: "luis@olmos.com",
+                password: "1234",
+            };
+            const userResponse = await requester.post("/api/sessions/register").send(mockUsuario);
+            const userId = userResponse._body.payload;
+            expect(userId).to.not.be.undefined;
+            const mockAdopcion = {
+                uid: userId,
+                pid: petId,
+                adoptionDate: "2024-11-19",
+            };
+            const response = await requester.post(`/api/adoptions/${userId}/${petId}`).send(mockAdopcion).timeout(10000);
+            expect(response.status).to.equal(200);
+            expect(response._body).to.have.property("status", "success");
+            expect(response._body).to.have.property("message", "Pet adopted");
+        }); 
+
+        it("Debe poder encontrar una adopción correctamente al pasarle su ID", async () => {
+            const adopcionId = "6765eb6fdbd1ee751ded5e16";
+            const { statusCode } = await requester.get(`/api/adoptions/${adopcionId}`);
+            expect(statusCode).to.equal(200);
+        }); 
+
+        it("Al obtener a las adopciones con el metodo GET, la respuesta debe tener los campos status y payload. Ademas, payload debe ser de tipo Arreglo.", async () => {
+            const { statusCode, _body } = await requester.get("/api/adoptions");
+            expect(statusCode).to.equal(200);
+            expect(_body).to.have.property("status").that.equals("success");
+            expect(_body).to.have.property("payload").that.is.an("array");
+        }); 
+    });
 })
 
 
