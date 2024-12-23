@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-const collection = 'Pets';
-
 const schema = new mongoose.Schema({
     name:{
         type:String,
@@ -18,11 +16,11 @@ const schema = new mongoose.Schema({
     },
     owner:{
         type:mongoose.SchemaTypes.ObjectId,
-        ref:'Users'
+        ref:'users'
     },
     image:String
 })
 
-const petModel = mongoose.model(collection,schema);
+const petModel = mongoose.model("pets",schema);
 
 export default petModel;

@@ -1,4 +1,14 @@
-import { usersService } from "../services/index.js"
+import { usersService } from "../services/index.js";
+
+const createUser = async(req, res)=> {
+    try {
+        const newUser = req.body;
+        await usersService.create(newUser);
+        res.status(201).send({status: "success", payload: newUser});
+    } catch (error) {
+        res.status(500).send({status: "error", error: error.message});
+    }
+} 
 
 const getAllUsers = async(req,res)=>{
     const users = await usersService.getAll();
@@ -28,6 +38,7 @@ const deleteUser = async(req,res) =>{
 }
 
 export default {
+    createUser,
     deleteUser,
     getAllUsers,
     getUser,

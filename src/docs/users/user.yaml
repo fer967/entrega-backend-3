@@ -1,0 +1,142 @@
+paths:
+  /api/users:
+    get:
+      sumary: obtengo los usuarios de la DB
+      tags:
+        - Users
+      responses:
+        "200":
+          description: obtengo usuarios correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/User"
+        "500":
+          description: error interno del servidor
+    post:
+      sumary: este endpoint crea un usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createUser"
+      responses:
+        "201":
+          description: usuario creado correctamente
+        "500":
+          description: error interno del servidor
+  /api/users/{uid}:
+    get:
+      sumary: obtengo un usuario por Id
+      tags:
+        - users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del usuario para buscar
+        schema:
+          type: string
+      responses:
+        "200":
+          description: usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/User"
+        "500":
+          description: error interno del servidor
+    put:
+      sumary: actualizo un usuario por Id
+      tags:
+        - users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del usuario para actualizar
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateUser"
+      responses:
+        "200":
+          description: usuario actualizado correctamente
+        "404":
+          description: usuario no encontrado
+        "500":
+          description: error interno del servidor
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado por Mongo DB
+        first_name:
+          type: string
+          description: nombre del usuario
+        last_name:
+          type: string
+          description: apellido del usuario
+        password:
+          type: string
+          description: contraseña del usuario
+      example:
+        _id: ObjectId("123456")
+        first_name: Carlos
+        last_name: Gardel
+        password: 1234
+  requestBodies:
+    createUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: nombre del usuario
+        last_name:
+          type: string
+          description: apellido del usuario
+        password:
+          type: string
+          description: contraseña del usuario
+        email:
+          type: string
+          description: correo del usuario
+      example:
+        first_name: Carina
+        last_name: Gauna
+        password: 1234
+        email: cari@gauna.com 
+    updateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: nombre del usuario
+        last_name:
+          type: string
+          description: apellido del usuario
+        password:
+          type: string
+          description: contraseña del usuario
+        email:
+          type: string
+          description: correo del usuario
+      example:
+        first_name: Carina
+        last_name: Gauna
+        password: 1234
+        email: cari@gauna.com

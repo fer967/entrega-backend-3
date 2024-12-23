@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-const collection = 'Users';
-
 const schema = new mongoose.Schema({
     first_name:{
         type: String,
@@ -29,7 +27,7 @@ const schema = new mongoose.Schema({
             {
                 _id:{
                     type:mongoose.SchemaTypes.ObjectId,
-                    ref:'Pets'
+                    ref:'pets'
                 }
             }
         ],
@@ -37,6 +35,6 @@ const schema = new mongoose.Schema({
     }
 })
 
-const userModel = mongoose.model(collection,schema);
+const userModel = mongoose.model("users",schema);
 
 export default userModel;

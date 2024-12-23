@@ -1,0 +1,123 @@
+paths:
+  /api/pets:
+    get:
+      sumary: obtengo las mascotas de la DB
+      tags:
+        - Pets
+      responses:
+        "200":
+          description: obtengo mascotas correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Pet"
+        "500":
+          description: error interno del servidor
+    post:
+      sumary: este endpoint crea una mascota
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createPet"
+      responses:
+        "201":
+          description: mascota creada correctamente
+        "500":
+          description: error interno del servidor
+  /api/pets/{uid}:
+    get:
+      sumary: obtengo una mascota por Id
+      tags:
+        - pets
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id de la mascota para buscar
+        schema:
+          type: string
+      responses:
+        "200":
+          description: mascota encontrada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Pet"
+        "500":
+          description: error interno del servidor
+    put:
+      sumary: actualizo un mascota por Id
+      tags:
+        - pets
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id de la mascota para actualizar
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updatePet"
+      responses:
+        "200":
+          description: mascota actualizada correctamente
+        "404":
+          description: mascota no encontrada
+        "500":
+          description: error interno del servidor
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado por Mongo DB
+        name:
+          type: string
+          description: nombre de la mascota
+        specie:
+          type: string
+          description: especie de la mascota
+      example:
+        _id: ObjectId("123456")
+        name: Otto
+        specie: perro
+  requestBodies:
+    createPet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: nombre de la mascota
+        specie:
+          type: string
+          description: especie de la mascota
+      example:
+        name: Otto
+        specie: perro
+    updatePet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: nombre de la mascota
+        specie:
+          type: string
+          description: especie de la mascota
+      example:
+        name: Pepo
+        specie: loro
+
