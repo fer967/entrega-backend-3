@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import cors from 'cors';
 import exphbs from 'express-handlebars';
 import usersRouter from './routes/users.router.js';
 import petsRouter from './routes/pets.router.js';
@@ -9,11 +11,18 @@ import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mocks.router.js';
 import viewsRouter from './routes/views.router.js';
 import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUiExpress from 'swagger-ui-express';
+import swaggerUiExpress from 'swagger-ui-express'
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT||8080;
 const connection = mongoose.connect(process.env.MONGO_URL);
+connection.then(() => console.log("Conectado a la base de datos"))
+.catch(error => console.log("Error al conectar a la base de datos", error));
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 
 const swaggerOptions = {
     definition: {
