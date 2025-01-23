@@ -25,5 +25,6 @@ https://hub.docker.com/repository/docker/fer967/entrega-backend-3/general
 ### para desarrollo : `nodemon`
 ### para test : `mocha` `chai` `supertest`
 ### para vistas : `express-handlebars`
+### para documentacion : `swagger`
 ### conexion a DB : `mongoose`
 ### ademas : `express` `bcrypt` `jsonwebtoken` `faker`

@@ -13,7 +13,8 @@ import swaggerUiExpress from 'swagger-ui-express';
 
 const app = express();
 const PORT = process.env.PORT||8080;
-const connection = mongoose.connect("mongodb+srv://gabriel70080:coder@cluster0.yt1in.mongodb.net/adoptame?retryWrites=true&w=majority&appName=Cluster0")
+const connection = mongoose.connect(process.env.MONGO_URL);
+
 const swaggerOptions = {
     definition: {
         openapi: "3.0.1",
@@ -42,4 +43,4 @@ app.use('/', viewsRouter);
 app.use("/", express.static("./src/public"));
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-app.listen(PORT,()=>console.log(`server on http://localhost:${PORT}`)); 
+app.listen(PORT, () => console.log(`server in http://localhost:${PORT}`)); 
